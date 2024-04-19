@@ -52,6 +52,13 @@ struct HfTaskD0 {
   // ML inference
   Configurable<bool> applyMl{"applyMl", false, "Flag to apply ML selections"};
 
+  // Configurable axis for THnSparse
+  ConfigurableAxis bkgScoreAxis{"bkgScoreAxis", {50, 0.f, 1.f}, "Number of bins in bkg BDT score axis of the THnSparse"};
+  ConfigurableAxis nonPromptScoreAxis{"nonPromptScoreAxis", {50, 0.f, 1.f}, "Number of bins in non-prompt BDT score axis of the THnSparse"};
+  ConfigurableAxis massAxis{"massAxis", {120, 1.5848, 2.1848}, "Number of bins in invariant-mass axis of the THnSparse"};
+  ConfigurableAxis ptAxis{"ptAxis", {120, 0., 24.}, "Number of bins in pT axis of the THnSparse"};
+  ConfigurableAxis yAxis{"yAxis", {20, -1., 1.}, "Number of bins in y axis of the THnSparse"};
+
   HfHelper hfHelper;
 
   using D0Candidates = soa::Join<aod::HfCand2Prong, aod::HfSelD0>;
@@ -74,7 +81,7 @@ struct HfTaskD0 {
   Partition<D0CandidatesMlMc> selectedD0CandidatesMlMc = aod::hf_sel_candidate_d0::isRecoHfFlag >= selectionFlagHf;
   Partition<D0CandidatesMlMcKF> selectedD0CandidatesMlMcKF = aod::hf_sel_candidate_d0::isRecoHfFlag >= selectionFlagHf;
 
-  HistogramConfigSpec hTHnBdtScoreVsMassVsPtVsYVsOriginVsD0Type{HistType::kTHnSparseD, {{100, 0.f, 1.f}, {100, 0.f, 1.f}, {120, 1.5848, 2.1848}, {360, 0., 36.}, {100, -5., 5.}, {3, -0.5, 2.5}, {4, -0.5, 3.5}}};
+  HistogramConfigSpec hTHnBdtScoreVsMassVsPtVsYVsOriginVsD0Type{HistType::kTHnSparseD, {bkgScoreAxis, nonPromptScoreAxis, massAxis, ptAxis, yAxis, {3, -0.5, 2.5}, {4, -0.5, 3.5}}};
 
   HistogramRegistry registry{
     "registry",
